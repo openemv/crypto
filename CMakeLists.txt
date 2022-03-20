@@ -16,3 +16,7 @@ project(crypto
 	HOMEPAGE_URL "https://github.com/openemv/crypto"
 	LANGUAGES C
 )
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
+
+find_package(MbedTLS 2.16) # Latest version available on Ubuntu 20.04 and Fedora 34
