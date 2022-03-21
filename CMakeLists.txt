@@ -56,3 +56,35 @@ elseif(OpenSSL_FOUND)
 else()
 	message(FATAL_ERROR "Either MbedTLS or OpenSSL is required")
 endif()
+
+# TDES crypto library
+add_library(crypto_tdes OBJECT EXCLUDE_FROM_ALL)
+target_include_directories(crypto_tdes PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+
+if(USE_MBEDTLS)
+	# TDES crypto library
+	target_sources(crypto_tdes PRIVATE mbedtls/crypto_tdes.c)
+	target_link_libraries(crypto_tdes PRIVATE MbedTLS::mbedcrypto)
+elseif(USE_OPENSSL)
+	# TDES crypto library
+	target_sources(crypto_tdes PRIVATE openssl/crypto_tdes.c)
+	target_link_libraries(crypto_tdes PRIVATE OpenSSL::Crypto)
+endif()
+
+# Configure various compilation properties
+set_target_properties(
+	crypto_tdes
+	PROPERTIES
+		C_STANDARD 11
+		C_EXTENSIONS OFF
+		C_VISIBILITY_PRESET hidden
+)
+if(BUILD_SHARED_LIBS)
+	set_target_properties(
+		crypto_tdes
+		PROPERTIES
+			POSITION_INDEPENDENT_CODE True
+	)
+endif()
