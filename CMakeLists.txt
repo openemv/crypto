@@ -63,19 +63,34 @@ target_include_directories(crypto_tdes PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 
+# AES crypto library
+add_library(crypto_aes OBJECT EXCLUDE_FROM_ALL)
+target_include_directories(crypto_aes PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+
 if(USE_MBEDTLS)
 	# TDES crypto library
 	target_sources(crypto_tdes PRIVATE mbedtls/crypto_tdes.c)
 	target_link_libraries(crypto_tdes PRIVATE MbedTLS::mbedcrypto)
+
+	# AES crypto library
+	target_sources(crypto_aes PRIVATE mbedtls/crypto_aes.c)
+	target_link_libraries(crypto_aes PRIVATE MbedTLS::mbedcrypto)
 elseif(USE_OPENSSL)
 	# TDES crypto library
 	target_sources(crypto_tdes PRIVATE openssl/crypto_tdes.c)
 	target_link_libraries(crypto_tdes PRIVATE OpenSSL::Crypto)
+
+	# AES crypto library
+	target_sources(crypto_aes PRIVATE openssl/crypto_aes.c)
+	target_link_libraries(crypto_aes PRIVATE OpenSSL::Crypto)
 endif()
 
 # Configure various compilation properties
 set_target_properties(
 	crypto_tdes
+	crypto_aes
 	PROPERTIES
 		C_STANDARD 11
 		C_EXTENSIONS OFF
@@ -84,6 +99,7 @@ set_target_properties(
 if(BUILD_SHARED_LIBS)
 	set_target_properties(
 		crypto_tdes
+		crypto_aes
 		PROPERTIES
 			POSITION_INDEPENDENT_CODE True
 	)
