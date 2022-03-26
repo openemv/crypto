@@ -57,6 +57,13 @@ else()
 	message(FATAL_ERROR "Either MbedTLS or OpenSSL is required")
 endif()
 
+# Memory helper library
+add_library(crypto_mem OBJECT EXCLUDE_FROM_ALL)
+target_sources(crypto_mem PRIVATE generic/crypto_mem.c)
+target_include_directories(crypto_mem PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+
 # TDES crypto library
 add_library(crypto_tdes OBJECT EXCLUDE_FROM_ALL)
 target_include_directories(crypto_tdes PUBLIC
@@ -89,6 +96,7 @@ endif()
 
 # Configure various compilation properties
 set_target_properties(
+	crypto_mem
 	crypto_tdes
 	crypto_aes
 	PROPERTIES
@@ -98,6 +106,7 @@ set_target_properties(
 )
 if(BUILD_SHARED_LIBS)
 	set_target_properties(
+		crypto_mem
 		crypto_tdes
 		crypto_aes
 		PROPERTIES
