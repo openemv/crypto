@@ -64,6 +64,12 @@ target_include_directories(crypto_mem PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 
+# Random data helper library
+add_library(crypto_rand OBJECT EXCLUDE_FROM_ALL)
+target_include_directories(crypto_rand PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+
 # TDES crypto library
 add_library(crypto_tdes OBJECT EXCLUDE_FROM_ALL)
 target_include_directories(crypto_tdes PUBLIC
@@ -77,6 +83,10 @@ target_include_directories(crypto_aes PUBLIC
 )
 
 if(USE_MBEDTLS)
+	# Random data helper library
+	target_sources(crypto_rand PRIVATE mbedtls/crypto_rand.c)
+	target_link_libraries(crypto_rand PRIVATE MbedTLS::mbedcrypto)
+
 	# TDES crypto library
 	target_sources(crypto_tdes PRIVATE mbedtls/crypto_tdes.c)
 	target_link_libraries(crypto_tdes PRIVATE MbedTLS::mbedcrypto)
@@ -85,6 +95,10 @@ if(USE_MBEDTLS)
 	target_sources(crypto_aes PRIVATE mbedtls/crypto_aes.c)
 	target_link_libraries(crypto_aes PRIVATE MbedTLS::mbedcrypto)
 elseif(USE_OPENSSL)
+	# Random data helper library
+	target_sources(crypto_rand PRIVATE openssl/crypto_rand.c)
+	target_link_libraries(crypto_rand PRIVATE OpenSSL::Crypto)
+
 	# TDES crypto library
 	target_sources(crypto_tdes PRIVATE openssl/crypto_tdes.c)
 	target_link_libraries(crypto_tdes PRIVATE OpenSSL::Crypto)
@@ -97,6 +111,7 @@ endif()
 # Configure various compilation properties
 set_target_properties(
 	crypto_mem
+	crypto_rand
 	crypto_tdes
 	crypto_aes
 	PROPERTIES
@@ -107,6 +122,7 @@ set_target_properties(
 if(BUILD_SHARED_LIBS)
 	set_target_properties(
 		crypto_mem
+		crypto_rand
 		crypto_tdes
 		crypto_aes
 		PROPERTIES
