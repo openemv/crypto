@@ -54,7 +54,7 @@ int crypto_aes_encrypt(const void* key, size_t key_len, const void* iv, const vo
  * @param key Key
  * @param key_len Length of key in bytes
  * @param plaintext Plaintext to encrypt. Must be of length @ref AES_BLOCK_SIZE.
- * @param ciphertext Encrypted output
+ * @param ciphertext Encrypted output of length @ref AES_BLOCK_SIZE.
  * @return Zero for success. Less than zero for internal error.
  */
 static inline int crypto_aes_encrypt_ecb(const void* key, size_t key_len, const void* plaintext, void* ciphertext)
@@ -80,8 +80,8 @@ int crypto_aes_decrypt(const void* key, size_t key_len, const void* iv, const vo
  *
  * @param key Key
  * @param key_len Length of key in bytes
- * @param ciphertext Ciphertext to decrypt. Must be of length @ref DES_BLOCK_SIZE.
- * @param plaintext Decrypted output
+ * @param ciphertext Ciphertext to decrypt. Must be of length @ref AES_BLOCK_SIZE.
+ * @param plaintext Decrypted output of length @ref AES_BLOCK_SIZE.
  * @return Zero for success. Less than zero for internal error.
  */
 static inline int crypto_aes_decrypt_ecb(const void* key, size_t key_len, const void* ciphertext, void* plaintext)

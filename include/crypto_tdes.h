@@ -52,7 +52,7 @@ int crypto_des_encrypt(const void* key, const void* iv, const void* plaintext, s
  *
  * @param key Key of length @ref DES_KEY_SIZE
  * @param plaintext Plaintext to encrypt. Must be of length @ref DES_BLOCK_SIZE.
- * @param ciphertext Encrypted output
+ * @param ciphertext Encrypted output of length @ref DES_BLOCK_SIZE.
  * @return Zero for success. Less than zero for internal error.
  */
 static inline int crypto_des_encrypt_ecb(const void* key, const void* plaintext, void* ciphertext)
@@ -90,7 +90,7 @@ static inline int crypto_tdes_encrypt_ecb(const void* key, size_t key_len, const
 /**
  * Encrypt using double length TDES-CBC
  *
- * @param key Key
+ * @param key Key of length @ref TDES2_KEY_SIZE
  * @param iv Initialization vector
  * @param plaintext Plaintext to encrypt
  * @param plen Length of plaintext in bytes. Must be a multiple of @ref DES_BLOCK_SIZE.
@@ -105,9 +105,9 @@ static inline int crypto_tdes2_encrypt(const void* key, const void* iv, const vo
 /**
  * Encrypt using double length TDES-ECB
  *
- * @param key Key
+ * @param key Key of length @ref TDES2_KEY_SIZE
  * @param plaintext Plaintext to encrypt. Must be of length @ref DES_BLOCK_SIZE.
- * @param ciphertext Encrypted output
+ * @param ciphertext Encrypted output of length @ref DES_BLOCK_SIZE.
  * @return Zero for success. Less than zero for internal error.
  */
 static inline int crypto_tdes2_encrypt_ecb(const void* key, const void* plaintext, void* ciphertext)
@@ -145,7 +145,7 @@ static inline int crypto_tdes_decrypt_ecb(const void* key, size_t key_len, const
 /**
  * Decrypt using double length TDES-CBC
  *
- * @param key Key
+ * @param key Key of length @ref TDES2_KEY_SIZE
  * @param iv Initialization vector
  * @param ciphertext Ciphertext to decrypt
  * @param clen Length of ciphertext in bytes. Must be a multiple of @ref DES_BLOCK_SIZE.
@@ -160,9 +160,9 @@ static inline int crypto_tdes2_decrypt(const void* key, const void* iv, const vo
 /**
  * Decrypt using double length TDES-ECB
  *
- * @param key Key
+ * @param key Key of length @ref TDES2_KEY_SIZE
  * @param ciphertext Ciphertext to decrypt. Must be of length @ref DES_BLOCK_SIZE.
- * @param plaintext Decrypted output
+ * @param plaintext Decrypted output of length @ref DES_BLOCK_SIZE.
  * @return Zero for success. Less than zero for internal error.
  */
 static inline int crypto_tdes2_decrypt_ecb(const void* key, const void* ciphertext, void* plaintext)
