@@ -35,6 +35,7 @@ __BEGIN_DECLS
 #define TDES2_KEY_SIZE (DES_KEY_SIZE * 2) ///< Double length triple DES key size in bytes
 #define TDES3_KEY_SIZE (DES_KEY_SIZE * 3) ///< Triple length triple DES key size in bytes
 #define DES_RETAIL_MAC_SIZE (4) ///< ANSI X9.19 Retail MAC size in bytes
+#define DES_CBCMAC_SIZE (DES_BLOCK_SIZE) ///< DES CBC-MAC size in bytes
 
 /**
  * Encrypt using single length DES-CBC
@@ -189,6 +190,33 @@ static inline int crypto_tdes2_decrypt_ecb(const void* key, const void* cipherte
  *         Greater than zero for invalid/unsupported parameters.
  */
 int crypto_tdes2_retail_mac(const void* key, const void* buf, size_t buf_len, void* mac);
+
+/**
+ * Generate TDES CBC-MAC
+ *
+ * @remark See ISO 9797-1:2011 MAC algorithm 1 with TDES
+ *
+ * @warning This MAC algorithm is vulnerable in many ways and should only be
+ *          used when required for interoperability with a specific standard.
+ *          This implementation does not apply a specific padding technique
+ *          and the caller should apply appropriate padding to ensure that the
+ *          input buffer length is a multiple of @ref DES_BLOCK_SIZE.
+ *
+ * @param key Key
+ * @param key_len Length of key in bytes
+ * @param buf Input buffer
+ * @param buf_len Length of input buffer in bytes. Must be a multiple of @ref DES_BLOCK_SIZE.
+ * @param mac CBC-MAC output of length @ref DES_CBCMAC_SIZE
+ * @return Zero for success. Less than zero for internal error.
+ *         Greater than zero for invalid/unsupported parameters.
+ */
+int crypto_tdes_cbcmac(
+	const void* key,
+	size_t key_len,
+	const void* buf,
+	size_t buf_len,
+	void* mac
+);
 
 __END_DECLS
 

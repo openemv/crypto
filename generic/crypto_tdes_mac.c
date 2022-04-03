@@ -95,3 +95,56 @@ exit:
 
 	return r;
 }
+
+int crypto_tdes_cbcmac(
+	const void* key,
+	size_t key_len,
+	const void* buf,
+	size_t buf_len,
+	void* mac
+)
+{
+	int r;
+	uint8_t iv[DES_BLOCK_SIZE];
+
+	if (!key || !buf || !buf_len || !mac) {
+		return 1;
+	}
+	if (key_len != TDES2_KEY_SIZE && key_len != TDES3_KEY_SIZE) {
+		// Invalid key length
+		return 2;
+	}
+
+	// See ISO 9797-1:2011 MAC algorithm 1
+	// - No key derivation
+	// - Final iteration 1
+	// - Output transformation 1
+	// - May be used with padding method 1, 2 or 3
+
+	// This implementation does not apply padding and the caller should ensure
+	// that the input buffer length is a multiple of DES_BLOCK_SIZE
+	if ((buf_len & (DES_BLOCK_SIZE-1)) != 0) {
+		return 3;
+	}
+
+	// Compute TDES CBC-MAC
+	memset(iv, 0, sizeof(iv)); // Start with zero IV
+	for (size_t i = 0; i < buf_len; i += DES_BLOCK_SIZE) {
+		r = crypto_tdes_encrypt(key, key_len, iv, buf + i, DES_BLOCK_SIZE, iv);
+		if (r) {
+			goto exit;
+		}
+	}
+
+	// Copy MAC result without truncation
+	memcpy(mac, iv, DES_CBCMAC_SIZE);
+
+	r = 0;
+	goto exit;
+
+exit:
+	// Cleanup
+	crypto_cleanse(iv, sizeof(iv));
+
+	return r;
+}
