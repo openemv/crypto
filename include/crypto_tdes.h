@@ -74,6 +74,20 @@ static inline int crypto_des_encrypt_ecb(const void* key, const void* plaintext,
 int crypto_tdes_encrypt(const void* key, size_t key_len, const void* iv, const void* plaintext, size_t plen, void* ciphertext);
 
 /**
+ * Encrypt using TDES-ECB
+ *
+ * @param key Key
+ * @param key_len Length of key in bytes
+ * @param plaintext Plaintext to encrypt. Must be of length @ref DES_BLOCK_SIZE.
+ * @param ciphertext Encrypted output of length @ref DES_BLOCK_SIZE.
+ * @return Zero for success. Less than zero for internal error.
+ */
+static inline int crypto_tdes_encrypt_ecb(const void* key, size_t key_len, const void* plaintext, void* ciphertext)
+{
+	return crypto_tdes_encrypt(key, key_len, NULL, plaintext, DES_BLOCK_SIZE, ciphertext);
+}
+
+/**
  * Encrypt using double length TDES-CBC
  *
  * @param key Key
@@ -113,6 +127,20 @@ static inline int crypto_tdes2_encrypt_ecb(const void* key, const void* plaintex
  * @return Zero for success. Less than zero for internal error.
  */
 int crypto_tdes_decrypt(const void* key, size_t key_len, const void* iv, const void* ciphertext, size_t clen, void* plaintext);
+
+/**
+ * Decrypt using TDES-ECB
+ *
+ * @param key Key
+ * @param key_len Length of key in bytes
+ * @param ciphertext Ciphertext to decrypt. Must be of length @ref DES_BLOCK_SIZE.
+ * @param plaintext Decrypted output of length @ref DES_BLOCK_SIZE.
+ * @return Zero for success. Less than zero for internal error.
+ */
+static inline int crypto_tdes_decrypt_ecb(const void* key, size_t key_len, const void* ciphertext, void* plaintext)
+{
+	return crypto_tdes_decrypt(key, key_len, NULL, ciphertext, DES_BLOCK_SIZE, plaintext);
+}
 
 /**
  * Decrypt using double length TDES-CBC
