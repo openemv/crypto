@@ -88,7 +88,7 @@ if(USE_MBEDTLS)
 	target_link_libraries(crypto_rand PRIVATE MbedTLS::mbedcrypto)
 
 	# TDES crypto library
-	target_sources(crypto_tdes PRIVATE mbedtls/crypto_tdes.c)
+	target_sources(crypto_tdes PRIVATE mbedtls/crypto_tdes.c generic/crypto_tdes_mac.c)
 	target_link_libraries(crypto_tdes PRIVATE MbedTLS::mbedcrypto)
 
 	# AES crypto library
@@ -100,7 +100,7 @@ elseif(USE_OPENSSL)
 	target_link_libraries(crypto_rand PRIVATE OpenSSL::Crypto)
 
 	# TDES crypto library
-	target_sources(crypto_tdes PRIVATE openssl/crypto_tdes.c)
+	target_sources(crypto_tdes PRIVATE openssl/crypto_tdes.c generic/crypto_tdes_mac.c)
 	target_link_libraries(crypto_tdes PRIVATE OpenSSL::Crypto)
 
 	# AES crypto library

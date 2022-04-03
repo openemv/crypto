@@ -34,6 +34,7 @@ __BEGIN_DECLS
 #define DES_KEY_SIZE (8) ///< DES key size in bytes
 #define TDES2_KEY_SIZE (DES_KEY_SIZE * 2) ///< Double length triple DES key size in bytes
 #define TDES3_KEY_SIZE (DES_KEY_SIZE * 3) ///< Triple length triple DES key size in bytes
+#define DES_RETAIL_MAC_SIZE (4) ///< ANSI X9.19 Retail MAC size in bytes
 
 /**
  * Encrypt using single length DES-CBC
@@ -169,6 +170,25 @@ static inline int crypto_tdes2_decrypt_ecb(const void* key, const void* cipherte
 {
 	return crypto_tdes2_decrypt(key, NULL, ciphertext, DES_BLOCK_SIZE, plaintext);
 }
+
+/**
+ * Generate ANSI X9.19 Retail MAC
+ *
+ * @remark See ISO 9797-1:2011, MAC algorithm 3 with DES, Padding method 1
+ *
+ * @warning This MAC algorithm is vulnerable in many ways and should only be
+ *          used together with ANSI X9.24-1:2009 TDES DUKPT when required for
+ *          interoperability. This is also why the output is truncated to
+ *          length @ref DES_RETAIL_MAC_SIZE.
+ *
+ * @param key Key of length @ref TDES2_KEY_SIZE
+ * @param buf Input data
+ * @param buf_len Length of input data in bytes
+ * @param mac MAC output of length @ref DES_RETAIL_MAC_SIZE
+ * @return Zero for success. Less than zero for internal error.
+ *         Greater than zero for invalid/unsupported parameters.
+ */
+int crypto_tdes2_retail_mac(const void* key, const void* buf, size_t buf_len, void* mac);
 
 __END_DECLS
 
