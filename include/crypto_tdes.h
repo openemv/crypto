@@ -36,6 +36,7 @@ __BEGIN_DECLS
 #define TDES3_KEY_SIZE (DES_KEY_SIZE * 3) ///< Triple length triple DES key size in bytes
 #define DES_RETAIL_MAC_SIZE (4) ///< ANSI X9.19 Retail MAC size in bytes
 #define DES_CBCMAC_SIZE (DES_BLOCK_SIZE) ///< DES CBC-MAC size in bytes
+#define DES_CMAC_SIZE (DES_BLOCK_SIZE) ///< DES CMAC size in bytes
 
 /**
  * Encrypt using single length DES-CBC
@@ -216,6 +217,28 @@ int crypto_tdes_cbcmac(
 	const void* buf,
 	size_t buf_len,
 	void* mac
+);
+
+/**
+ * Generate TDES CMAC
+ *
+ * @remark See ISO 9797-1:2011 MAC algorithm 5
+ * @remark See NIST SP 800-38B
+ *
+ * @param key Key
+ * @param key_len Length of key in bytes
+ * @param buf Input data
+ * @param buf_len Length of input data in bytes
+ * @param cmac CMAC output of length @ref DES_CMAC_SIZE
+ * @return Zero for success. Less than zero for internal error.
+ *         Greater than zero for invalid/unsupported parameters.
+ */
+int crypto_tdes_cmac(
+	const void* key,
+	size_t key_len,
+	const void* buf,
+	size_t buf_len,
+	void* cmac
 );
 
 __END_DECLS
