@@ -1,0 +1,14 @@
+##############################################################################
+# Copyright (c) 2022 Leon Lynch
+#
+# This file is licensed under the terms of the MIT license.
+# See LICENSE file.
+##############################################################################
+
+cmake_minimum_required(VERSION 3.16)
+
+if(BUILD_TESTING)
+	add_executable(crypto_tdes2_retail_mac_test crypto_tdes2_retail_mac_test.c)
+	target_link_libraries(crypto_tdes2_retail_mac_test crypto_tdes crypto_mem)
+	add_test(crypto_tdes2_retail_mac_test crypto_tdes2_retail_mac_test)
+endif()

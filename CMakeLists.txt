@@ -129,3 +129,9 @@ if(BUILD_SHARED_LIBS)
 			POSITION_INDEPENDENT_CODE True
 	)
 endif()
+
+# Only add tests if this is the top-level project
+if(crypto_IS_TOP_LEVEL)
+	include(CTest)
+	add_subdirectory(test)
+endif()
