@@ -37,6 +37,8 @@ __BEGIN_DECLS
 #define DES_RETAIL_MAC_SIZE (4) ///< ANSI X9.19 Retail MAC size in bytes
 #define DES_CBCMAC_SIZE (DES_BLOCK_SIZE) ///< DES CBC-MAC size in bytes
 #define DES_CMAC_SIZE (DES_BLOCK_SIZE) ///< DES CMAC size in bytes
+#define DES_KCV_SIZE_LEGACY (3) ///< DES KCV size in bytes using legacy approach
+#define DES_KCV_SIZE_CMAC (5) ///< DES KCV size in bytes using CMAC approach
 
 /**
  * Encrypt using single length DES-CBC
@@ -240,6 +242,33 @@ int crypto_tdes_cmac(
 	size_t buf_len,
 	void* cmac
 );
+
+/**
+ * Generate TDES Key Check Value (KCV) using legacy approach
+ *
+ * @remark See ANSI X9.24-1:2009, Figure C-3 Generatic Key Check Value
+ * @remark See ANSI X9.24-1:2017, A.2 Legacy Approach
+ *
+ * @param key Key
+ * @param key_len Length of key in bytes
+ * @param kcv Key Check Value output of length @ref DES_KCV_SIZE_LEGACY
+ * @return Zero for success. Less than zero for internal error.
+ *         Greater than zero for invalid/unsupported parameters.
+ */
+int crypto_tdes_kcv_legacy(const void* key, size_t key_len, void* kcv);
+
+/**
+ * Generate TDES Key Check Value (KCV) using CMAC approach
+ *
+ * @remark See ANSI X9.24-1:2017, A.3 CMAC-based Check values
+ *
+ * @param key Key
+ * @param key_len Length of key in bytes
+ * @param kcv Key Check Value output of length @ref DES_KCV_SIZE_CMAC
+ * @return Zero for success. Less than zero for internal error.
+ *         Greater than zero for invalid/unsupported parameters.
+ */
+int crypto_tdes_kcv_cmac(const void* key, size_t key_len, void* kcv);
 
 __END_DECLS
 
