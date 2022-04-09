@@ -15,4 +15,8 @@ if(BUILD_TESTING)
 	add_executable(crypto_tdes_cmac_test crypto_tdes_cmac_test.c)
 	target_link_libraries(crypto_tdes_cmac_test crypto_tdes crypto_mem)
 	add_test(crypto_tdes_cmac_test crypto_tdes_cmac_test)
+
+	add_executable(crypto_aes_cmac_test crypto_aes_cmac_test.c)
+	target_link_libraries(crypto_aes_cmac_test crypto_aes crypto_mem)
+	add_test(crypto_aes_cmac_test crypto_aes_cmac_test)
 endif()
