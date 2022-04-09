@@ -34,6 +34,7 @@ __BEGIN_DECLS
 #define AES128_KEY_SIZE (16) ///< AES-128 key size in bytes
 #define AES192_KEY_SIZE (24) ///< AES-192 key size in bytes
 #define AES256_KEY_SIZE (32) ///< AES-256 key size in bytes
+#define AES_CMAC_SIZE (AES_BLOCK_SIZE) ///< AES CMAC size in bytes
 
 /**
  * Encrypt using AES-CBC
@@ -88,6 +89,29 @@ static inline int crypto_aes_decrypt_ecb(const void* key, size_t key_len, const 
 {
 	return crypto_aes_decrypt(key, key_len, NULL, ciphertext, AES_BLOCK_SIZE, plaintext);
 }
+
+/**
+ * Generate AES CMAC
+ *
+ * @remark See ISO 9797-1:2011 MAC algorithm 5
+ * @remark See NIST SP 800-38B
+ * @remark See IETF RFC 4493
+ *
+ * @param key Key
+ * @param key_len Length of key in bytes
+ * @param buf Input data
+ * @param buf_len Length of input data in bytes
+ * @param cmac AES-CMAC output of length @ref AES_CMAC_SIZE
+ * @return Zero for success. Less than zero for internal error.
+ *         Greater than zero for invalid/unsupported parameters.
+ */
+int crypto_aes_cmac(
+	const void* key,
+	size_t key_len,
+	const void* buf,
+	size_t buf_len,
+	void* cmac
+);
 
 __END_DECLS
 
