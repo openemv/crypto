@@ -92,7 +92,7 @@ if(USE_MBEDTLS)
 	target_link_libraries(crypto_tdes PRIVATE MbedTLS::mbedcrypto)
 
 	# AES crypto library
-	target_sources(crypto_aes PRIVATE mbedtls/crypto_aes.c generic/crypto_aes_mac.c)
+	target_sources(crypto_aes PRIVATE mbedtls/crypto_aes.c generic/crypto_aes_mac.c generic/crypto_aes_kcv.c)
 	target_link_libraries(crypto_aes PRIVATE MbedTLS::mbedcrypto)
 elseif(USE_OPENSSL)
 	# Random data helper library
@@ -104,7 +104,7 @@ elseif(USE_OPENSSL)
 	target_link_libraries(crypto_tdes PRIVATE OpenSSL::Crypto)
 
 	# AES crypto library
-	target_sources(crypto_aes PRIVATE openssl/crypto_aes.c generic/crypto_aes_mac.c)
+	target_sources(crypto_aes PRIVATE openssl/crypto_aes.c generic/crypto_aes_mac.c generic/crypto_aes_kcv.c)
 	target_link_libraries(crypto_aes PRIVATE OpenSSL::Crypto)
 endif()
 

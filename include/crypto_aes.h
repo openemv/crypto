@@ -35,6 +35,7 @@ __BEGIN_DECLS
 #define AES192_KEY_SIZE (24) ///< AES-192 key size in bytes
 #define AES256_KEY_SIZE (32) ///< AES-256 key size in bytes
 #define AES_CMAC_SIZE (AES_BLOCK_SIZE) ///< AES CMAC size in bytes
+#define AES_KCV_SIZE (5) ///< AES CMAC KCV size in bytes
 
 /**
  * Encrypt using AES-CBC
@@ -112,6 +113,19 @@ int crypto_aes_cmac(
 	size_t buf_len,
 	void* cmac
 );
+
+/**
+ * Generate AES Key Check Value (KCV) using CMAC approach
+ *
+ * @remark See ANSI X9.24-1:2017, A.3 CMAC-based Check values
+ *
+ * @param key Key
+ * @param key_len Length of key in bytes
+ * @param kcv Key Check Value output of length @ref AES_KCV_SIZE
+ * @return Zero for success. Less than zero for internal error.
+ *         Greater than zero for invalid/unsupported parameters.
+ */
+int crypto_aes_kcv(const void* key, size_t key_len, void* kcv);
 
 __END_DECLS
 
