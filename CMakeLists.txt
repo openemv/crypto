@@ -82,6 +82,12 @@ target_include_directories(crypto_aes PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 
+# HMAC crypto library
+add_library(crypto_hmac OBJECT EXCLUDE_FROM_ALL)
+target_include_directories(crypto_hmac PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+
 if(USE_MBEDTLS)
 	# Random data helper library
 	target_sources(crypto_rand PRIVATE mbedtls/crypto_rand.c)
@@ -94,6 +100,10 @@ if(USE_MBEDTLS)
 	# AES crypto library
 	target_sources(crypto_aes PRIVATE mbedtls/crypto_aes.c generic/crypto_aes_mac.c generic/crypto_aes_kcv.c)
 	target_link_libraries(crypto_aes PRIVATE MbedTLS::mbedcrypto)
+
+	# HMAC crypto library
+	target_sources(crypto_hmac PRIVATE mbedtls/crypto_hmac.c)
+	target_link_libraries(crypto_hmac PRIVATE MbedTLS::mbedcrypto)
 elseif(USE_OPENSSL)
 	# Random data helper library
 	target_sources(crypto_rand PRIVATE openssl/crypto_rand.c)
@@ -106,6 +116,10 @@ elseif(USE_OPENSSL)
 	# AES crypto library
 	target_sources(crypto_aes PRIVATE openssl/crypto_aes.c generic/crypto_aes_mac.c generic/crypto_aes_kcv.c)
 	target_link_libraries(crypto_aes PRIVATE OpenSSL::Crypto)
+
+	# HMAC crypto library
+	target_sources(crypto_hmac PRIVATE openssl/crypto_hmac.c)
+	target_link_libraries(crypto_hmac PRIVATE OpenSSL::Crypto)
 endif()
 
 # Configure various compilation properties
@@ -114,6 +128,7 @@ set_target_properties(
 	crypto_rand
 	crypto_tdes
 	crypto_aes
+	crypto_hmac
 	PROPERTIES
 		C_STANDARD 11
 		C_EXTENSIONS OFF
@@ -125,6 +140,7 @@ if(BUILD_SHARED_LIBS)
 		crypto_rand
 		crypto_tdes
 		crypto_aes
+		crypto_hmac
 		PROPERTIES
 			POSITION_INDEPENDENT_CODE True
 	)
