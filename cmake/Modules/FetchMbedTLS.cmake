@@ -20,8 +20,8 @@ include(FetchContent)
 message(CHECK_START "Downloading and configuring MbedTLS...")
 FetchContent_Declare(
 	MbedTLS
-	URL "https://github.com/ARMmbed/mbedtls/archive/refs/tags/v3.0.0.tar.gz"
-	URL_HASH SHA256=525bfde06e024c1218047dee1c8b4c89312df1a4b5658711009086cda5dfaa55
+	URL "https://github.com/ARMmbed/mbedtls/archive/refs/tags/v2.28.0.tar.gz"
+	URL_HASH SHA256=6519579b836ed78cc549375c7c18b111df5717e86ca0eeff4cb64b2674f424cc
 )
 
 if (BUILD_TESTING)
