@@ -197,3 +197,70 @@ exit:
 
 	return r;
 }
+
+int crypto_aes_encrypt_ctr(const void* key, size_t key_len, const void* iv, const void* plaintext, size_t plen, void* ciphertext)
+{
+	int r;
+	EVP_CIPHER_CTX* ctx;
+	int clen;
+	int clen2;
+
+	// IV/nonce is required for CTR mode
+	if (!iv) {
+		return -1;
+	}
+
+	ctx = EVP_CIPHER_CTX_new();
+	if (!ctx) {
+		r = -2;
+		goto exit;
+	}
+
+	switch (key_len) {
+		case AES128_KEY_SIZE:
+			r = EVP_EncryptInit_ex(ctx, EVP_aes_128_ctr(), NULL, key, iv);
+			break;
+
+		case AES192_KEY_SIZE:
+			r = EVP_EncryptInit_ex(ctx, EVP_aes_192_ctr(), NULL, key, iv);
+			break;
+
+		case AES256_KEY_SIZE:
+			r = EVP_EncryptInit_ex(ctx, EVP_aes_256_ctr(), NULL, key, iv);
+			break;
+
+		default:
+			r = -3;
+			goto exit;
+	}
+	if (!r) {
+		r = -4;
+		goto exit;
+	}
+
+	// Disable padding
+	EVP_CIPHER_CTX_set_padding(ctx, 0);
+
+	clen = 0;
+	r = EVP_EncryptUpdate(ctx, ciphertext, &clen, plaintext, plen);
+	if (!r) {
+		r = -5;
+		goto exit;
+	}
+
+	clen2 = 0;
+	r = EVP_EncryptFinal_ex(ctx, ciphertext + clen, &clen2);
+	if (!r) {
+		r = -6;
+		goto exit;
+	}
+
+	r = 0;
+	goto exit;
+
+exit:
+	// Cleanup
+	EVP_CIPHER_CTX_free(ctx);
+
+	return r;
+}

@@ -23,6 +23,7 @@
  */
 
 #include "crypto_aes.h"
+#include "crypto_mem.h"
 
 #include <stddef.h>
 #include <stdint.h>
@@ -128,6 +129,55 @@ int crypto_aes_decrypt(const void* key, size_t key_len, const void* iv, const vo
 exit:
 	// Cleanup
 	mbedtls_aes_free(&ctx);
+
+	return r;
+}
+
+int crypto_aes_encrypt_ctr(const void* key, size_t key_len, const void* iv, const void* plaintext, size_t plen, void* ciphertext)
+{
+	int r;
+	mbedtls_aes_context ctx;
+
+	// CTR mode state
+	size_t nc_off = 0;
+	unsigned char nonce_counter[AES_BLOCK_SIZE];
+	unsigned char stream_block[AES_BLOCK_SIZE];
+
+	if (key_len != AES128_KEY_SIZE &&
+		key_len != AES192_KEY_SIZE &&
+		key_len != AES256_KEY_SIZE
+	) {
+		return -1;
+	}
+
+	// IV/nonce is required for CTR mode
+	if (!iv) {
+		return -2;
+	}
+
+	mbedtls_aes_init(&ctx);
+	r = mbedtls_aes_setkey_enc(&ctx, key, key_len * 8);
+	if (r) {
+		r = -3;
+		goto exit;
+	}
+
+	memcpy(nonce_counter, iv, sizeof(nonce_counter));
+	memset(stream_block, 0, sizeof(stream_block));
+	r = mbedtls_aes_crypt_ctr(&ctx, plen, &nc_off, nonce_counter, stream_block, plaintext, ciphertext);
+	if (r) {
+		r = -4;
+		goto exit;
+	}
+
+	r = 0;
+	goto exit;
+
+exit:
+	// Cleanup
+	mbedtls_aes_free(&ctx);
+	crypto_cleanse(nonce_counter, sizeof(nonce_counter));
+	crypto_cleanse(stream_block, sizeof(stream_block));
 
 	return r;
 }

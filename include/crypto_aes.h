@@ -92,6 +92,35 @@ static inline int crypto_aes_decrypt_ecb(const void* key, size_t key_len, const 
 }
 
 /**
+ * Encrypt using AES-CTR
+ *
+ * @param key Key
+ * @param key_len Length of key in bytes
+ * @param iv Initialization vector / nonce
+ * @param plaintext Plaintext to encrypt
+ * @param plen Length of plaintext in bytes
+ * @param ciphertext Encrypted output
+ * @return Zero for success. Less than zero for internal error.
+ */
+int crypto_aes_encrypt_ctr(const void* key, size_t key_len, const void* iv, const void* plaintext, size_t plen, void* ciphertext);
+
+/**
+ * Decrypt using AES-CTR
+ *
+ * @param key Key
+ * @param key_len Length of key in bytes
+ * @param iv Initialization vector / nonce
+ * @param ciphertext Ciphertext to decrypt
+ * @param clen Length of ciphertext in bytes
+ * @param plaintext Decrypted output
+ * @return Zero for success. Less than zero for internal error.
+ */
+static inline int crypto_aes_decrypt_ctr(const void* key, size_t key_len, const void* iv, const void* ciphertext, size_t clen, void* plaintext)
+{
+	return crypto_aes_encrypt_ctr(key, key_len, iv, ciphertext, clen, plaintext);
+}
+
+/**
  * Generate AES CMAC
  *
  * @remark See ISO 9797-1:2011 MAC algorithm 5
