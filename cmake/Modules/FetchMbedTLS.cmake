@@ -30,7 +30,7 @@ else()
 	# Manually populate content to add EXCLUDE_FROM_ALL
 	# and ignore testing (faster builds)
 	FetchContent_GetProperties(MbedTLS)
-	if(NOT depname_POPULATED)
+	if(NOT MbedTLS_POPULATED)
 		FetchContent_Populate(MbedTLS)
 		add_subdirectory(${mbedtls_SOURCE_DIR} ${mbedtls_BINARY_DIR} EXCLUDE_FROM_ALL)
 	endif()
