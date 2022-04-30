@@ -38,9 +38,13 @@ is enabled (`CTest` enables it by default).
 
 An example of adding this project to a parent project would be:
 ```
-add_subdirectory(crypto EXCLUDE_FROM_ALL)
+add_subdirectory(crypto)
 add_subdirectory(crypto/test)
 ```
+
+Note that it is not necessary, and not recommended, for `EXCLUDE_FROM_ALL` to
+be specified when adding this project to a parent project. This project
+already specifies `EXCLUDE_FROM_ALL` for each `add_library()`.
 
 MbedTLS options
 ---------------
@@ -55,6 +59,11 @@ finds and uses a cryptographic implementation other than MbedTLS.
 When specifying `FETCH_MBEDTLS` together with `BUILD_SHARED_LIBS`, it may also
 be necessary to use `USE_SHARED_MBEDTLS_LIBRARY` to ensure that MbedTLS is
 built as a shared library.
+
+When specifying `FETCH_MBEDTLS`, the local copy of MbedTLS will add CTest
+tests. It is therefore important not to specify `EXCLUDE_FROM_ALL` when adding
+this project to a parent project as that will add the tests but exclude them
+from the build, causing testing to fail.
 
 License
 -------
