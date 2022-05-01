@@ -1,6 +1,8 @@
 Common crypto abstraction
 =========================
 
+[![License: MIT](https://img.shields.io/github/license/openemv/crypto)](https://opensource.org/licenses/MIT)
+
 This project is a common crypto abstraction that can be shared by software
 projects related to card payment processing. The intention is to ease porting
 to different software cryptographic implementations (like MbedTLS or OpenSSL)
