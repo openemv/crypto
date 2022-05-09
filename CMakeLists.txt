@@ -54,7 +54,7 @@ elseif(OpenSSL_FOUND)
 	set(CRYPTO_PKGCONFIG_REQ_PRIV "libcrypto" PARENT_SCOPE)
 	set(CRYPTO_PKGCONFIG_LIBS_PRIV "-lcrypto" PARENT_SCOPE)
 else()
-	message(FATAL_ERROR "Either MbedTLS or OpenSSL is required")
+	message(FATAL_ERROR "Either MbedTLS or OpenSSL is required. Enable FETCH_MBEDTLS to download and build MbedTLS.")
 endif()
 
 # Memory helper library
