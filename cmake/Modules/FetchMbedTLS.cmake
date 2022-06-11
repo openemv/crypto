@@ -24,17 +24,30 @@ FetchContent_Declare(
 	URL_HASH SHA256=525bfde06e024c1218047dee1c8b4c89312df1a4b5658711009086cda5dfaa55
 )
 
-if (BUILD_TESTING)
-	FetchContent_MakeAvailable(MbedTLS)
-else()
-	# Manually populate content to add EXCLUDE_FROM_ALL
-	# and ignore testing (faster builds)
+# Use helper function to manually populate content instead of using
+# FetchContent_MakeAvailable(). This allows EXCLUDE_FROM_ALL to be specified
+# for add_subdirectory() and creates a separate scope for variables used by
+# MbedTLS. These variables instruct MbedTLS to ignore minor compile warnings,
+# disable MbedTLS programs and disable testing. The result is a faster build
+# of the MbedTLS libraries.
+function(add_mbedtls)
 	FetchContent_GetProperties(MbedTLS)
 	if(NOT MbedTLS_POPULATED)
 		FetchContent_Populate(MbedTLS)
+
+		# Enforce policy CMP0077 in subdirectory scope
+		# This allows overriding options with variables
+		set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+
+		# Override MbedTLS build options
+		set(MBEDTLS_FATAL_WARNINGS OFF)
+		set(ENABLE_PROGRAMS OFF)
+		set(ENABLE_TESTING OFF)
 		add_subdirectory(${mbedtls_SOURCE_DIR} ${mbedtls_BINARY_DIR} EXCLUDE_FROM_ALL)
 	endif()
-endif()
+endfunction()
+
+add_mbedtls()
 message(CHECK_PASS "done")
 
 # Add library aliases according to the names in _deps/mbedtls-src/library/CMakeLists.txt

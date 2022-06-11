@@ -22,10 +22,11 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Mo
 # Prefer MbedTLS and allow the FETCH_MBEDTLS option to download and build
 # a local copy of MbedTLS for monolithic builds on platforms without package
 # managers like Windows and MacOS.
-find_package(MbedTLS 2.16) # Latest version available on Ubuntu 20.04 and Fedora 34
 option(FETCH_MBEDTLS "Download and build MbedTLS")
-if(NOT MbedTLS_FOUND AND FETCH_MBEDTLS)
+if(FETCH_MBEDTLS)
 	include(FetchMbedTLS)
+else()
+	find_package(MbedTLS 2.16) # Latest version available on Ubuntu 20.04 and Fedora 34
 endif()
 
 if(NOT MbedTLS_FOUND)
