@@ -20,12 +20,12 @@ Dependencies
 ------------
 
 * C11 compiler such as GCC or Clang
-* CMake
+* [CMake](https://cmake.org/)
 * At least one supported cryptographic implementation (see below)
 
 Supported cryptographic implementations:
-* MbedTLS
-* OpenSSL
+* [MbedTLS](https://github.com/Mbed-TLS/mbedtls)
+* [OpenSSL](https://www.openssl.org/)
 
 Usage
 -----
@@ -53,23 +53,18 @@ MbedTLS options
 
 If MbedTLS is not available, the `FETCH_MBEDTLS` option can be specified to
 download and build a local copy during the CMake build. If the platform
-provides MbedTLS but it is desirable to build a local copy instead, the
-`CMAKE_DISABLE_FIND_PACKAGE_MbedTLS` can be used to prevent CMake from finding
-it. This option can even be used without `FETCH_MBEDTLS` to ensure that CMake
-finds and uses a cryptographic implementation other than MbedTLS.
+provides MbedTLS but it should not be used, the
+`CMAKE_DISABLE_FIND_PACKAGE_MbedTLS` option can be used to prevent CMake from
+finding it. This option can even be used without `FETCH_MBEDTLS` to ensure that
+CMake finds and uses a cryptographic implementation other than MbedTLS.
 
 When specifying `FETCH_MBEDTLS` together with `BUILD_SHARED_LIBS`, it may also
 be necessary to use `USE_SHARED_MBEDTLS_LIBRARY` to ensure that MbedTLS is
 built as a shared library.
 
-When specifying `FETCH_MBEDTLS`, the local copy of MbedTLS will add CTest
-tests. It is therefore important not to specify `EXCLUDE_FROM_ALL` when adding
-this project to a parent project as that will add the tests but exclude them
-from the build, causing testing to fail.
-
 License
 -------
 
-Copyright (c) 2021, 2022 Leon Lynch.
+Copyright (c) 2021, 2022 [Leon Lynch](https://github.com/leonlynch).
 
 This project is licensed under the terms of the MIT license. See LICENSE file.
