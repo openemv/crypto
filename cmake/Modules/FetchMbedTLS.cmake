@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2021 Leon Lynch
+# Copyright (c) 2021, 2022 Leon Lynch
 #
 # This file is licensed under the terms of the MIT license.
 # See LICENSE file.
@@ -20,8 +20,8 @@ include(FetchContent)
 message(CHECK_START "Downloading and configuring MbedTLS...")
 FetchContent_Declare(
 	MbedTLS
-	URL "https://github.com/ARMmbed/mbedtls/archive/refs/tags/v3.0.0.tar.gz"
-	URL_HASH SHA256=525bfde06e024c1218047dee1c8b4c89312df1a4b5658711009086cda5dfaa55
+	URL "https://github.com/Mbed-TLS/mbedtls/archive/refs/tags/v3.2.1.tar.gz"
+	URL_HASH SHA256=d0e77a020f69ad558efc660d3106481b75bd3056d6301c31564e04a0faae88cc
 )
 
 # Use helper function to manually populate content instead of using
@@ -57,4 +57,4 @@ add_library(MbedTLS::mbedx509 ALIAS mbedx509)
 
 # MbedTLS is now ready to use
 set(MbedTLS_FOUND True)
-set(MbedTLS_VERSION 3.0.0)
+set(MbedTLS_VERSION 3.2.1)
