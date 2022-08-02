@@ -39,14 +39,18 @@ endif()
 # facilitate the generation of CMake package configuration files.
 # The CRYPTO_PKGCONFIG_REQ_PRIV and CRYPTO_PKGCONFIG_LIBS_PRIV variables are
 # set for the parent scope to facilitate the generation of pkgconfig files.
+# Note that these variables should only be set if the the platform's crypto
+# libraries were used, but not for a local copy (like when MbedTLS is fetched).
 if(MbedTLS_FOUND)
 	# Prefer MbedTLS
 	message(STATUS "Using MbedTLS")
 	set(USE_MBEDTLS TRUE)
-	list(APPEND CRYPTO_PACKAGE_DEPENDENCIES "MbedTLS 2.16")
-	set(CRYPTO_PACKAGE_DEPENDENCIES ${CRYPTO_PACKAGE_DEPENDENCIES} PARENT_SCOPE)
-	# NOTE: MbedTLS has no pkgconfig file so CRYPTO_PKGCONFIG_REQ_PRIV cannot be set
-	set(CRYPTO_PKGCONFIG_LIBS_PRIV "-lmbedcrypto" PARENT_SCOPE)
+	if(NOT FETCH_MBEDTLS)
+		list(APPEND CRYPTO_PACKAGE_DEPENDENCIES "MbedTLS 2.16")
+		set(CRYPTO_PACKAGE_DEPENDENCIES ${CRYPTO_PACKAGE_DEPENDENCIES} PARENT_SCOPE)
+		# NOTE: MbedTLS has no pkgconfig file so CRYPTO_PKGCONFIG_REQ_PRIV cannot be set
+		set(CRYPTO_PKGCONFIG_LIBS_PRIV "-lmbedcrypto" PARENT_SCOPE)
+	endif()
 elseif(OpenSSL_FOUND)
 	message(STATUS "Using OpenSSL")
 	set(USE_OPENSSL TRUE)
