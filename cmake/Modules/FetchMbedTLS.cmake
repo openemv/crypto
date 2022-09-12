@@ -17,6 +17,15 @@
 
 include(FetchContent)
 
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.24")
+	# CMake >=3.24 has changed the behaviour of FetchContent_Declare() but the
+	# new behaviour doesn't impact this project. The old behaviour can still be
+	# accessed using the DOWNLOAD_EXTRACT_TIMESTAMP parameter which causes
+	# older CMake versions to fail. So it's easier to simply accept the new
+	# behaviour if it's available to suppress the warning.
+	cmake_policy(SET CMP0135 NEW)
+endif()
+
 message(CHECK_START "Downloading and configuring MbedTLS...")
 FetchContent_Declare(
 	MbedTLS
