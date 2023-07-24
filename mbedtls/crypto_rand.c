@@ -2,7 +2,7 @@
  * @file crypto_rand.c
  * @brief Random data crypto helper functions using MbedTLS
  *
- * Copyright (c) 2021, 2022 Leon Lynch
+ * Copyright (c) 2021, 2022, 2023 Leon Lynch
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -23,6 +23,7 @@
  */
 
 #include "crypto_rand.h"
+#include "crypto_mem.h"
 
 #include <string.h>
 
@@ -56,8 +57,7 @@ void crypto_rand_non_zero(void* buf, size_t len)
 				ptr[--len] = data[data_len];
 			}
 		}
-
-		memset(data, 0, sizeof(data));
-
 	}
+
+	crypto_cleanse(data, sizeof(data));
 }
