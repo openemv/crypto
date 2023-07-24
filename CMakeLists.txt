@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright (c) 2022 Leon Lynch
+# Copyright (c) 2022, 2023 Leon Lynch
 #
 # This file is licensed under the terms of the MIT license.
 # See LICENSE file.
@@ -26,12 +26,27 @@ option(FETCH_MBEDTLS "Download and build MbedTLS")
 if(FETCH_MBEDTLS)
 	include(FetchMbedTLS)
 else()
-	find_package(MbedTLS 2.16) # Latest version available on Ubuntu 20.04 and Fedora 34
+	# MbedTLS version 3 and later provides a CMake config file
+	find_package(MbedTLS 3 CONFIG)
+	if(MbedTLS_FOUND)
+		set(MbedTLS_MIN_VERSION 3)
+		# MbedTLS CMake config file does not print a message
+		message(STATUS "Found MbedTLS: found suitable version \"${MbedTLS_VERSION}\"")
+	else()
+		# MbedTLS version 2 does not provide a CMake config file but this project
+		# provides FindMbedTLS.cmake to find it
+		find_package(MbedTLS 2.16)
+		if(MbedTLS_FOUND)
+			# Latest version available on Ubuntu 20.04 and Fedora 34
+			set(MbedTLS_MIN_VERSION 2.16)
+		endif()
+	endif()
 endif()
 
 if(NOT MbedTLS_FOUND)
 	# Alternatively, try OpenSSL
-	find_package(OpenSSL 1.1 COMPONENTS Crypto)
+	set(OpenSSL_MIN_VERSION 1.1)
+	find_package(OpenSSL ${OpenSSL_MIN_VERSION} COMPONENTS Crypto)
 endif()
 
 # Choose crypto implementation and inform parent scope.
@@ -43,18 +58,18 @@ endif()
 # libraries were used, but not for a local copy (like when MbedTLS is fetched).
 if(MbedTLS_FOUND)
 	# Prefer MbedTLS
-	message(STATUS "Using MbedTLS")
+	message(STATUS "Using MbedTLS ${MbedTLS_VERSION}")
 	set(USE_MBEDTLS TRUE)
 	if(NOT FETCH_MBEDTLS)
-		list(APPEND CRYPTO_PACKAGE_DEPENDENCIES "MbedTLS 2.16")
+		list(APPEND CRYPTO_PACKAGE_DEPENDENCIES "MbedTLS ${MbedTLS_MIN_VERSION}")
 		set(CRYPTO_PACKAGE_DEPENDENCIES ${CRYPTO_PACKAGE_DEPENDENCIES} PARENT_SCOPE)
 		# NOTE: MbedTLS has no pkgconfig file so CRYPTO_PKGCONFIG_REQ_PRIV cannot be set
 		set(CRYPTO_PKGCONFIG_LIBS_PRIV "-lmbedcrypto" PARENT_SCOPE)
 	endif()
 elseif(OpenSSL_FOUND)
-	message(STATUS "Using OpenSSL")
+	message(STATUS "Using OpenSSL ${OPENSSL_VERSION}")
 	set(USE_OPENSSL TRUE)
-	list(APPEND CRYPTO_PACKAGE_DEPENDENCIES "OpenSSL 1.1 COMPONENTS Crypto")
+	list(APPEND CRYPTO_PACKAGE_DEPENDENCIES "OpenSSL ${OpenSSL_MIN_VERSION} COMPONENTS Crypto")
 	set(CRYPTO_PACKAGE_DEPENDENCIES ${CRYPTO_PACKAGE_DEPENDENCIES} PARENT_SCOPE)
 	set(CRYPTO_PKGCONFIG_REQ_PRIV "libcrypto" PARENT_SCOPE)
 	set(CRYPTO_PKGCONFIG_LIBS_PRIV "-lcrypto" PARENT_SCOPE)
