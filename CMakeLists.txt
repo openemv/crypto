@@ -29,7 +29,7 @@ else()
 	# MbedTLS version 3 and later provides a CMake config file
 	find_package(MbedTLS 3 CONFIG)
 	if(MbedTLS_FOUND)
-		set(MbedTLS_MIN_VERSION 3)
+		set(MbedTLS_DEP_PARAMS "3 CONFIG")
 		# MbedTLS CMake config file does not print a message
 		message(STATUS "Found MbedTLS: found suitable version \"${MbedTLS_VERSION}\"")
 	else()
@@ -38,7 +38,7 @@ else()
 		find_package(MbedTLS 2.16)
 		if(MbedTLS_FOUND)
 			# Latest version available on Ubuntu 20.04 and Fedora 34
-			set(MbedTLS_MIN_VERSION 2.16)
+			set(MbedTLS_DEP_PARAMS 2.16)
 		endif()
 	endif()
 endif()
@@ -53,7 +53,7 @@ endif()
 # The CRYPTO_PACKAGE_DEPENDENCIES variable is set for the parent scope to
 # facilitate the generation of CMake package configuration files.
 # The CRYPTO_PKGCONFIG_REQ_PRIV and CRYPTO_PKGCONFIG_LIBS_PRIV variables are
-# set for the parent scope to facilitate the generation of pkgconfig files.
+# set for the parent scope to facilitate the generation of pkg-config files.
 # Note that these variables should only be set if the the platform's crypto
 # libraries were used, but not for a local copy (like when MbedTLS is fetched).
 if(MbedTLS_FOUND)
@@ -61,9 +61,9 @@ if(MbedTLS_FOUND)
 	message(STATUS "Using MbedTLS ${MbedTLS_VERSION}")
 	set(USE_MBEDTLS TRUE)
 	if(NOT FETCH_MBEDTLS)
-		list(APPEND CRYPTO_PACKAGE_DEPENDENCIES "MbedTLS ${MbedTLS_MIN_VERSION}")
+		list(APPEND CRYPTO_PACKAGE_DEPENDENCIES "MbedTLS ${MbedTLS_DEP_PARAMS}")
 		set(CRYPTO_PACKAGE_DEPENDENCIES ${CRYPTO_PACKAGE_DEPENDENCIES} PARENT_SCOPE)
-		# NOTE: MbedTLS has no pkgconfig file so CRYPTO_PKGCONFIG_REQ_PRIV cannot be set
+		# NOTE: MbedTLS has no pkg-config file so CRYPTO_PKGCONFIG_REQ_PRIV cannot be set
 		set(CRYPTO_PKGCONFIG_LIBS_PRIV "-lmbedcrypto" PARENT_SCOPE)
 	endif()
 elseif(OpenSSL_FOUND)

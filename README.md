@@ -48,6 +48,15 @@ Note that it is not necessary, and not recommended, for `EXCLUDE_FROM_ALL` to
 be specified when adding this project to a parent project. This project
 already specifies `EXCLUDE_FROM_ALL` for each `add_library()`.
 
+This project provides several variables to the CMake parent scope for the
+parent project to use:
+* `CRYPTO_PACKAGE_DEPENDENCIES` for the parameters of `find_dependency()` when
+  generating the parent project's CMake package configuration file
+* `CRYPTO_PKGCONFIG_REQ_PRIV` for the dependencies in the `Requires.private`
+  field when generating the parent project's `pkg-config` file
+* `CRYPTO_PKGCONFIG_LIBS_PRIV` for the linker flags in the `Libs.private` field
+  when generating the parent project's `pkg-config` file
+
 MbedTLS options
 ---------------
 
