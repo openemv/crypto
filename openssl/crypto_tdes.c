@@ -2,7 +2,7 @@
  * @file crypto_tdes.c
  * @brief DES and TDES crypto helper functions using OpenSSL
  *
- * Copyright (c) 2021, 2022 Leon Lynch
+ * Copyright (c) 2021, 2022, 2023 Leon Lynch
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -28,12 +28,18 @@
 #include <stdint.h>
 #include <string.h>
 
+#include <openssl/opensslv.h>
+#include <openssl/crypto.h>
 #include <openssl/evp.h>
 
 int crypto_des_encrypt(const void* key, const void* iv, const void* plaintext, size_t plen, void* ciphertext)
 {
 	int r;
 	EVP_CIPHER_CTX* ctx;
+	const EVP_CIPHER* cipher;
+#if OPENSSL_VERSION_MAJOR >= 3
+	uint8_t key_buf[TDES2_KEY_SIZE];
+#endif
 	int clen;
 	int clen2;
 
@@ -52,12 +58,26 @@ int crypto_des_encrypt(const void* key, const void* iv, const void* plaintext, s
 		r = -3;
 		goto exit;
 	}
-
+#if OPENSSL_VERSION_MAJOR >= 3
+	// OpenSSL 3 has deprecated DES (but not TDES) and moved it to a legacy
+	// provider which cannot easily be used without impacting the parent
+	// project. Therefore TDES will be used to perform DES instead.
+	memcpy(key_buf, key, DES_KEY_SIZE);
+	memcpy(key_buf + DES_KEY_SIZE, key, DES_KEY_SIZE);
 	if (iv) { // IV implies CBC block mode
-		r = EVP_EncryptInit_ex(ctx, EVP_des_cbc(), NULL, key, iv);
+		cipher = EVP_des_ede_cbc();
 	} else { // No IV implies ECB block mode
-		r = EVP_EncryptInit_ex(ctx, EVP_des_ecb(), NULL, key, NULL);
+		cipher = EVP_des_ede_ecb();
 	}
+	key = key_buf;
+#else
+	if (iv) { // IV implies CBC block mode
+		cipher = EVP_des_cbc();
+	} else { // No IV implies ECB block mode
+		cipher = EVP_des_ecb();
+	}
+#endif
+	r = EVP_EncryptInit_ex(ctx, cipher, NULL, key, iv);
 	if (!r) {
 		r = -4;
 		goto exit;
@@ -86,6 +106,9 @@ int crypto_des_encrypt(const void* key, const void* iv, const void* plaintext, s
 exit:
 	// Cleanup
 	EVP_CIPHER_CTX_free(ctx);
+#if OPENSSL_VERSION_MAJOR >= 3
+	OPENSSL_cleanse(key_buf, sizeof(key_buf));
+#endif
 
 	return r;
 }
