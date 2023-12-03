@@ -1,7 +1,7 @@
 /**
  * @file crypto_tdes2_retail_mac_test.c
  *
- * Copyright (c) 2022 Leon Lynch
+ * Copyright 2022 Leon Lynch
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
