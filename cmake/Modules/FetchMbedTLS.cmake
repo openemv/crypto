@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright 2021-2022 Leon Lynch
+# Copyright 2021-2022, 2024 Leon Lynch
 #
 # This file is licensed under the terms of the MIT license.
 # See LICENSE file.
@@ -29,8 +29,8 @@ endif()
 message(CHECK_START "Downloading and configuring MbedTLS...")
 FetchContent_Declare(
 	MbedTLS
-	URL "https://github.com/Mbed-TLS/mbedtls/archive/refs/tags/v3.2.1.tar.gz"
-	URL_HASH SHA256=d0e77a020f69ad558efc660d3106481b75bd3056d6301c31564e04a0faae88cc
+	URL "https://github.com/Mbed-TLS/mbedtls/releases/download/v3.6.0/mbedtls-3.6.0.tar.bz2"
+	URL_HASH SHA256=3ecf94fcfdaacafb757786a01b7538a61750ebd85c4b024f56ff8ba1490fcd38
 )
 
 # Use helper function to manually populate content instead of using
@@ -72,4 +72,4 @@ add_library(MbedTLS::mbedx509 ALIAS mbedx509)
 
 # MbedTLS is now ready to use
 set(MbedTLS_FOUND True)
-set(MbedTLS_VERSION 3.2.1)
+set(MbedTLS_VERSION 3.6.0)
