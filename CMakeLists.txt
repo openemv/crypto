@@ -17,6 +17,7 @@ project(crypto
 	LANGUAGES C
 )
 
+include(FindPackageHandleStandardArgs) # Provides find_package() messages
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
 
 # Prefer MbedTLS and allow the FETCH_MBEDTLS option to download and build
@@ -31,7 +32,7 @@ else()
 	if(MbedTLS_FOUND)
 		set(MbedTLS_DEP_PARAMS "3 CONFIG")
 		# MbedTLS CMake config file does not print a message
-		message(STATUS "Found MbedTLS: found suitable version \"${MbedTLS_VERSION}\"")
+		find_package_handle_standard_args(MbedTLS CONFIG_MODE)
 	else()
 		# MbedTLS version 2 does not provide a CMake config file but this project
 		# provides FindMbedTLS.cmake to find it
