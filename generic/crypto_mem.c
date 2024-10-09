@@ -2,7 +2,7 @@
  * @file crypto_mem.c
  * @brief Memory-related crypto helper functions
  *
- * Copyright 2021-2022 Leon Lynch
+ * Copyright 2021-2022, 2024 Leon Lynch
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -28,16 +28,26 @@
 #include <stdint.h>
 #include <string.h>
 
+typedef void* (*memset_func_t)(void*, int, size_t);
+static volatile memset_func_t memset_func = &memset;
+
 __attribute__((noinline))
 void crypto_cleanse(void* buf, size_t len)
 {
-	memset(buf, 0, len);
+	// This function uses a combination of techniques to cleanse memory in a
+	// manner that will not be removed by the compiler during optimisation:
+	// - Volatile function pointer similar to OpenSSL's OPENSSL_cleanse()
+	// - Memory barrier together with noinline attribute as suggested by GCC
+
+	// See http://www.usenix.org/system/files/conference/usenixsecurity17/sec17-yang.pdf
+	memset_func(buf, 0, len);
 
 	// From GCC documentation:
 	// If the function does not have side effects, there are optimizations
 	// other than inlining that cause function calls to be optimized away,
 	// although the function call is live. To keep such calls from being
 	// optimized away, put...
+	// See https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html
 	__asm__ ("");
 }
 
