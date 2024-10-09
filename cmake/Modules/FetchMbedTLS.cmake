@@ -27,11 +27,6 @@ if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.24")
 endif()
 
 message(CHECK_START "Downloading and configuring MbedTLS...")
-FetchContent_Declare(
-	MbedTLS
-	URL "https://github.com/Mbed-TLS/mbedtls/releases/download/v3.6.0/mbedtls-3.6.0.tar.bz2"
-	URL_HASH SHA256=3ecf94fcfdaacafb757786a01b7538a61750ebd85c4b024f56ff8ba1490fcd38
-)
 
 # Use helper function to manually populate content instead of using
 # FetchContent_MakeAvailable(). This allows EXCLUDE_FROM_ALL to be specified
@@ -47,7 +42,14 @@ FetchContent_Declare(
 function(add_mbedtls)
 	FetchContent_GetProperties(MbedTLS)
 	if(NOT MbedTLS_POPULATED)
-		FetchContent_Populate(MbedTLS)
+		FetchContent_Populate(
+			MbedTLS
+			# Policy CMP0169 requires these parameters to be here instead of
+			# FetchContent_Declare() to avoid a deprecated form of
+			# FetchContent_Populate()
+			URL "https://github.com/Mbed-TLS/mbedtls/releases/download/v3.6.0/mbedtls-3.6.0.tar.bz2"
+			URL_HASH SHA256=3ecf94fcfdaacafb757786a01b7538a61750ebd85c4b024f56ff8ba1490fcd38
+		)
 
 		# Enforce policy CMP0077 in subdirectory scope
 		# This allows overriding options with variables
