@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright 2021-2022, 2024 Leon Lynch
+# Copyright 2021-2022, 2024-2025 Leon Lynch
 #
 # This file is licensed under the terms of the MIT license.
 # See LICENSE file.
@@ -47,8 +47,8 @@ function(add_mbedtls)
 			# Policy CMP0169 requires these parameters to be here instead of
 			# FetchContent_Declare() to avoid a deprecated form of
 			# FetchContent_Populate()
-			URL "https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-3.6.1/mbedtls-3.6.1.tar.bz2"
-			URL_HASH SHA256=fc8bef0991b43629b7e5319de6f34f13359011105e08e3e16eed3a9fe6ffd3a3
+			URL "https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-3.6.2/mbedtls-3.6.2.tar.bz2"
+			URL_HASH SHA256=8b54fb9bcf4d5a7078028e0520acddefb7900b3e66fec7f7175bb5b7d85ccdca
 		)
 
 		# Enforce policy CMP0077 in subdirectory scope
@@ -74,4 +74,4 @@ add_library(MbedTLS::mbedx509 ALIAS mbedx509)
 
 # MbedTLS is now ready to use
 set(MbedTLS_FOUND True)
-set(MbedTLS_VERSION 3.6.1)
+set(MbedTLS_VERSION 3.6.2)
