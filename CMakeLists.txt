@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright 2022-2024 Leon Lynch
+# Copyright 2022-2025 Leon Lynch
 #
 # This file is licensed under the terms of the MIT license.
 # See LICENSE file.
@@ -11,7 +11,7 @@ cmake_minimum_required(VERSION 3.16)
 # an object library that can be added to other projects.
 
 project(crypto
-	VERSION 0.1.8
+	VERSION 0.1.9
 	DESCRIPTION "OpenEMV common crypto abstraction"
 	HOMEPAGE_URL "https://github.com/openemv/crypto"
 	LANGUAGES C

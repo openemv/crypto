@@ -74,6 +74,6 @@ built as a shared library.
 License
 -------
 
-Copyright 2021-2024 [Leon Lynch](https://github.com/leonlynch).
+Copyright 2021-2025 [Leon Lynch](https://github.com/leonlynch).
 
 This project is licensed under the terms of the MIT license. See LICENSE file.
