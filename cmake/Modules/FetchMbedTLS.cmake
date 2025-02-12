@@ -49,6 +49,7 @@ function(add_mbedtls)
 			# FetchContent_Populate()
 			URL "https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-3.6.2/mbedtls-3.6.2.tar.bz2"
 			URL_HASH SHA256=8b54fb9bcf4d5a7078028e0520acddefb7900b3e66fec7f7175bb5b7d85ccdca
+			PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_LIST_DIR}/mbedtls_cmake_version_fix.patch
 		)
 
 		# Enforce policy CMP0077 in subdirectory scope
