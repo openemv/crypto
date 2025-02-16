@@ -109,6 +109,12 @@ target_include_directories(crypto_hmac PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 
+# SHA crypto library
+add_library(crypto_sha OBJECT EXCLUDE_FROM_ALL)
+target_include_directories(crypto_sha PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+
 if(USE_MBEDTLS)
 	# Random data helper library
 	target_sources(crypto_rand PRIVATE mbedtls/crypto_rand.c)
@@ -125,6 +131,10 @@ if(USE_MBEDTLS)
 	# HMAC crypto library
 	target_sources(crypto_hmac PRIVATE mbedtls/crypto_hmac.c)
 	target_link_libraries(crypto_hmac PRIVATE MbedTLS::mbedcrypto)
+
+	# SHA crypto library
+	target_sources(crypto_sha PRIVATE mbedtls/crypto_sha.c)
+	target_link_libraries(crypto_sha PRIVATE MbedTLS::mbedcrypto)
 elseif(USE_OPENSSL)
 	# Random data helper library
 	target_sources(crypto_rand PRIVATE openssl/crypto_rand.c)
@@ -141,6 +151,10 @@ elseif(USE_OPENSSL)
 	# HMAC crypto library
 	target_sources(crypto_hmac PRIVATE openssl/crypto_hmac.c)
 	target_link_libraries(crypto_hmac PRIVATE OpenSSL::Crypto)
+
+	# SHA crypto library
+	target_sources(crypto_sha PRIVATE openssl/crypto_sha.c)
+	target_link_libraries(crypto_sha PRIVATE OpenSSL::Crypto)
 endif()
 
 # Configure various compilation properties
@@ -150,6 +164,7 @@ set_target_properties(
 	crypto_tdes
 	crypto_aes
 	crypto_hmac
+	crypto_sha
 	PROPERTIES
 		C_STANDARD 11
 		C_EXTENSIONS OFF
@@ -162,6 +177,7 @@ if(BUILD_SHARED_LIBS)
 		crypto_tdes
 		crypto_aes
 		crypto_hmac
+		crypto_sha
 		PROPERTIES
 			POSITION_INDEPENDENT_CODE True
 	)

@@ -1,5 +1,5 @@
 ##############################################################################
-# Copyright 2022 Leon Lynch
+# Copyright 2022, 2025 Leon Lynch
 #
 # This file is licensed under the terms of the MIT license.
 # See LICENSE file.
@@ -23,4 +23,12 @@ if(BUILD_TESTING)
 	add_executable(crypto_hmac_test crypto_hmac_test.c)
 	target_link_libraries(crypto_hmac_test crypto_hmac)
 	add_test(crypto_hmac_test crypto_hmac_test)
+
+	add_executable(crypto_sha1_test crypto_sha1_test.c)
+	target_link_libraries(crypto_sha1_test crypto_sha)
+	add_test(crypto_sha1_test crypto_sha1_test)
+
+	add_executable(crypto_sha256_test crypto_sha256_test.c)
+	target_link_libraries(crypto_sha256_test crypto_sha)
+	add_test(crypto_sha256_test crypto_sha256_test)
 endif()
