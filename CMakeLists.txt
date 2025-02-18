@@ -115,6 +115,12 @@ target_include_directories(crypto_sha PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 
+# RSA crypto library
+add_library(crypto_rsa OBJECT EXCLUDE_FROM_ALL)
+target_include_directories(crypto_rsa PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+
 if(USE_MBEDTLS)
 	# Random data helper library
 	target_sources(crypto_rand PRIVATE mbedtls/crypto_rand.c)
@@ -135,6 +141,10 @@ if(USE_MBEDTLS)
 	# SHA crypto library
 	target_sources(crypto_sha PRIVATE mbedtls/crypto_sha.c)
 	target_link_libraries(crypto_sha PRIVATE MbedTLS::mbedcrypto)
+
+	# RSA crypto library
+	target_sources(crypto_rsa PRIVATE mbedtls/crypto_rsa.c)
+	target_link_libraries(crypto_rsa PRIVATE MbedTLS::mbedcrypto)
 elseif(USE_OPENSSL)
 	# Random data helper library
 	target_sources(crypto_rand PRIVATE openssl/crypto_rand.c)
@@ -155,6 +165,10 @@ elseif(USE_OPENSSL)
 	# SHA crypto library
 	target_sources(crypto_sha PRIVATE openssl/crypto_sha.c)
 	target_link_libraries(crypto_sha PRIVATE OpenSSL::Crypto)
+
+	# RSA crypto library
+	target_sources(crypto_rsa PRIVATE openssl/crypto_rsa.c)
+	target_link_libraries(crypto_rsa PRIVATE OpenSSL::Crypto)
 endif()
 
 # Configure various compilation properties
@@ -165,6 +179,7 @@ set_target_properties(
 	crypto_aes
 	crypto_hmac
 	crypto_sha
+	crypto_rsa
 	PROPERTIES
 		C_STANDARD 11
 		C_EXTENSIONS OFF
@@ -178,6 +193,7 @@ if(BUILD_SHARED_LIBS)
 		crypto_aes
 		crypto_hmac
 		crypto_sha
+		crypto_rsa
 		PROPERTIES
 			POSITION_INDEPENDENT_CODE True
 	)

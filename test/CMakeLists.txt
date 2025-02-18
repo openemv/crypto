@@ -31,4 +31,8 @@ if(BUILD_TESTING)
 	add_executable(crypto_sha256_test crypto_sha256_test.c)
 	target_link_libraries(crypto_sha256_test crypto_sha)
 	add_test(crypto_sha256_test crypto_sha256_test)
+
+	add_executable(crypto_rsa_test crypto_rsa_test.c)
+	target_link_libraries(crypto_rsa_test crypto_rsa)
+	add_test(crypto_rsa_test crypto_rsa_test)
 endif()
