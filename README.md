@@ -35,11 +35,14 @@ This CMake project can be added to CMake parent projects using the CMake
 the `test` subdirectory is not added automatically. Parent projects can add
 the `test` subdirectory manually if the tests are of interest to the parent
 project. However, note that the `test` subdirectory requires the CMake `CTest`
-module and that the tests will only be built when the `BUILD_TESTING` option
-is enabled (`CTest` enables it by default).
+module. Individual tests will only be built when the `BUILD_TESTING` option
+is enabled (`CTest` enables it by default) and the library of interest has been
+added to the `CRYPTO_TESTS` list.
 
-An example of adding this project to a parent project would be:
+An example of adding this project to a parent project such that only the tests
+related to `crypto_tdes` and `crypto_aes` are built, would be:
 ```
+list(APPEND CRYPTO_TESTS crypto_tdes crypto_aes)
 add_subdirectory(crypto)
 add_subdirectory(crypto/test)
 ```
