@@ -109,8 +109,8 @@ int crypto_sha1_finish(
 	c = *ctx;
 
 	r = mbedtls_sha1_finish_ret(c, digest);
+	crypto_sha1_free(ctx);
 	if (r) {
-		crypto_sha1_free(ctx);
 		return -1;
 	}
 
@@ -154,7 +154,7 @@ int crypto_sha256_init(crypto_sha256_ctx_t* ctx)
 }
 
 int crypto_sha256_update(
-	crypto_sha1_ctx_t* ctx,
+	crypto_sha256_ctx_t* ctx,
 	const void* buf,
 	size_t buf_len
 )
@@ -175,7 +175,7 @@ int crypto_sha256_update(
 
 	r = mbedtls_sha256_update_ret(c, buf, buf_len);
 	if (r) {
-		crypto_sha1_free(ctx);
+		crypto_sha256_free(ctx);
 		return -1;
 	}
 
@@ -183,7 +183,7 @@ int crypto_sha256_update(
 }
 
 int crypto_sha256_finish(
-	crypto_sha1_ctx_t* ctx,
+	crypto_sha256_ctx_t* ctx,
 	void* digest
 )
 {
@@ -202,8 +202,8 @@ int crypto_sha256_finish(
 	c = *ctx;
 
 	r = mbedtls_sha256_finish_ret(c, digest);
+	crypto_sha256_free(ctx);
 	if (r) {
-		crypto_sha1_free(ctx);
 		return -1;
 	}
 
