@@ -2,7 +2,7 @@
  * @file crypto_rand.c
  * @brief Random data crypto helper functions using MbedTLS
  *
- * Copyright 2021-2023 Leon Lynch
+ * Copyright 2021-2023, 2025 Leon Lynch
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -60,4 +60,46 @@ void crypto_rand_non_zero(void* buf, size_t len)
 	}
 
 	crypto_cleanse(data, sizeof(data));
+}
+
+int crypto_rand_byte(unsigned int min, unsigned int max)
+{
+	uint8_t data[32];
+	size_t data_len = sizeof(data);
+	unsigned int range;
+	unsigned int limit;
+	unsigned int max_tries = 500;
+
+	if (min >= max) {
+		return -1;
+	}
+	if (min > 255 || max > 255) {
+		return -2;
+	}
+
+	// Determine largest multiple of the range size that is less than or equal
+	// to the byte range size of 256 (because 0 - 255). This multiple is the
+	// rejection sampling limit and all numbers equal to or larger than this
+	// limit must be rejected such that a modulus of the remaining numbers is
+	// a uniform distribution of the desired range.
+	range = max - min + 1; // No risk of overflow because both are < 256
+	limit = 255 - (255 % range);
+
+	do {
+		crypto_rand(data, sizeof(data));
+
+		while (data_len) {
+			unsigned int x = data[--data_len];
+			if (x < limit) {
+				crypto_cleanse(data, sizeof(data));
+
+				// Reject samples greater than or equal to the limit
+				return (x % range) + min;
+			}
+		}
+	} while (--max_tries < 0);
+
+	// Failed to generate number within range
+	crypto_cleanse(data, sizeof(data));
+	return -3;
 }

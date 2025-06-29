@@ -2,7 +2,7 @@
  * @file crypto_rand.h
  * @brief Random data crypto helper functions
  *
- * Copyright 2021-2022 Leon Lynch
+ * Copyright 2021-2022, 2025 Leon Lynch
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -45,6 +45,17 @@ void crypto_rand(void* buf, size_t len);
  * @param len Length of buffer in bytes
  */
 void crypto_rand_non_zero(void* buf, size_t len);
+
+/**
+ * Generate single random byte within target range
+ *
+ * @param min Minimum random value (0 - 255)
+ * @param max Maximum random value (@p min - 255)
+ *
+ * @return Random value in the range [@p min - @p max]
+ * @return Less than zero for error
+ */
+int crypto_rand_byte(unsigned int min, unsigned int max);
 
 __END_DECLS
 
