@@ -40,6 +40,7 @@ void crypto_rand(void* buf, size_t len)
 	mbedtls_ctr_drbg_seed(&ctr_drbg, mbedtls_entropy_func, &entropy, NULL, 0);
 	mbedtls_ctr_drbg_random(&ctr_drbg, buf, len);
 	mbedtls_ctr_drbg_free(&ctr_drbg);
+	mbedtls_entropy_free(&entropy);
 }
 
 void crypto_rand_non_zero(void* buf, size_t len)
