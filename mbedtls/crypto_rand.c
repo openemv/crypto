@@ -47,15 +47,17 @@ void crypto_rand_non_zero(void* buf, size_t len)
 {
 	uint8_t* ptr = buf;
 	uint8_t data[32];
-	size_t data_len = sizeof(data);
 
 	while (len) {
-		crypto_rand(data, sizeof(data));
+		size_t data_len = sizeof(data);
 
 		// Use only non-zero bytes
+		crypto_rand(data, sizeof(data));
 		while (len && data_len) {
-			if (data[--data_len]) {
-				ptr[--len] = data[data_len];
+			unsigned int x = data[--data_len];
+
+			if (x) {
+				ptr[--len] = x;
 			}
 		}
 	}
@@ -66,12 +68,11 @@ void crypto_rand_non_zero(void* buf, size_t len)
 int crypto_rand_byte(unsigned int min, unsigned int max)
 {
 	uint8_t data[32];
-	size_t data_len = sizeof(data);
 	unsigned int range;
 	unsigned int limit;
 	unsigned int max_tries = 500;
 
-	if (min >= max) {
+	if (min > max) {
 		return -1;
 	}
 	if (min > 255 || max > 255) {
@@ -84,21 +85,23 @@ int crypto_rand_byte(unsigned int min, unsigned int max)
 	// limit must be rejected such that a modulus of the remaining numbers is
 	// a uniform distribution of the desired range.
 	range = max - min + 1; // No risk of overflow because both are < 256
-	limit = 255 - (255 % range);
+	limit = 256 - (256 % range);
 
 	do {
-		crypto_rand(data, sizeof(data));
+		size_t data_len = sizeof(data);
 
+		crypto_rand(data, sizeof(data));
 		while (data_len) {
 			unsigned int x = data[--data_len];
+
+			// Reject samples greater than or equal to the limit
 			if (x < limit) {
 				crypto_cleanse(data, sizeof(data));
 
-				// Reject samples greater than or equal to the limit
 				return (x % range) + min;
 			}
 		}
-	} while (--max_tries < 0);
+	} while (--max_tries > 0);
 
 	// Failed to generate number within range
 	crypto_cleanse(data, sizeof(data));
