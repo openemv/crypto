@@ -56,7 +56,7 @@ int crypto_aes_kcv(const void* key, size_t key_len, void* kcv)
 	// Compute CMAC of input block using input key
 	r = crypto_aes_cmac(key, key_len, zero, sizeof(zero), ciphertext);
 	if (r) {
-		return r;
+		goto exit;
 	}
 
 	// KCV is always first 5 bytes of ciphertext
