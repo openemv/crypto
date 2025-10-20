@@ -145,7 +145,7 @@ int crypto_tdes_encrypt(const void* key, size_t key_len, const void* iv, const v
 			}
 			break;
 
-		case TDES3_KEY_SIZE: // // Triple length TDES key
+		case TDES3_KEY_SIZE: // Triple length TDES key
 			if (iv) { // IV implies CBC block mode
 				r = EVP_EncryptInit_ex(ctx, EVP_des_ede3_cbc(), NULL, key, iv);
 			} else { // No IV implies ECB block mode

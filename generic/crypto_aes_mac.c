@@ -157,7 +157,7 @@ int crypto_aes_cmac(
 		crypto_xor(iv, k1, sizeof(iv));
 	} else {
 		// Final iteration 3:
-		// If message input is a multiple of cipher block size,
+		// If message input is not a multiple of cipher block size,
 		// XOR with subkey K2
 		crypto_xor(iv, k2, sizeof(iv));
 

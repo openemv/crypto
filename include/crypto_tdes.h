@@ -246,7 +246,7 @@ int crypto_tdes_cmac(
 /**
  * Generate TDES Key Check Value (KCV) using legacy approach
  *
- * @remark See ANSI X9.24-1:2009, Figure C-3 Generatic Key Check Value
+ * @remark See ANSI X9.24-1:2009, Figure C-3 Generating Key Check Value
  * @remark See ANSI X9.24-1:2017, A.2 Legacy Approach
  *
  * @param key Key
