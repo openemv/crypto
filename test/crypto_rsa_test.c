@@ -479,8 +479,8 @@ int main(void)
 
 		if (memcmp(output, rsa_tests[i].output, rsa_tests[i].mod_len) != 0) {
 			fprintf(stderr, "RSA test %zu failed\n", i);
-			print_buf("output", output, sizeof(rsa_tests[i].mod_len));
-			print_buf("expected",rsa_tests[i].output, rsa_tests[i].mod_len);
+			print_buf("output", output, rsa_tests[i].mod_len);
+			print_buf("expected", rsa_tests[i].output, rsa_tests[i].mod_len);
 			r = 1;
 			goto exit;
 		}
