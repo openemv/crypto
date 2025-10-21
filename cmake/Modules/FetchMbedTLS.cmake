@@ -47,8 +47,8 @@ function(add_mbedtls)
 			# Policy CMP0169 requires these parameters to be here instead of
 			# FetchContent_Declare() to avoid a deprecated form of
 			# FetchContent_Populate()
-			URL "https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-3.6.4/mbedtls-3.6.4.tar.bz2"
-			URL_HASH SHA256=ec35b18a6c593cf98c3e30db8b98ff93e8940a8c4e690e66b41dfc011d678110
+			URL "https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-3.6.5/mbedtls-3.6.5.tar.bz2"
+			URL_HASH SHA256=4a11f1777bb95bf4ad96721cac945a26e04bf19f57d905f241fe77ebeddf46d8
 			PATCH_COMMAND patch -p1 < ${CMAKE_CURRENT_LIST_DIR}/mbedtls_cmake_version_fix.patch
 		)
 
@@ -75,4 +75,4 @@ add_library(MbedTLS::mbedx509 ALIAS mbedx509)
 
 # MbedTLS is now ready to use
 set(MbedTLS_FOUND True)
-set(MbedTLS_VERSION 3.6.4)
+set(MbedTLS_VERSION 3.6.5)
