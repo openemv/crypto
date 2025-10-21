@@ -95,6 +95,9 @@ int crypto_rsa_mod_exp(
 		goto exit;
 	}
 
+	r = 0;
+	goto exit;
+
 exit:
 	// Cleanup
 	mbedtls_mpi_free(&N);
