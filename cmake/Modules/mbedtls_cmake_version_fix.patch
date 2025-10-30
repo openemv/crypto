@@ -11,3 +11,12 @@ index f0615027a7..869f54afd2 100644
  
  include(CMakePackageConfigHelpers)
  
+@@ -326,7 +326,8 @@ add_subdirectory(framework)
+
+ add_subdirectory(include)
+
+-add_subdirectory(3rdparty)
++# Exclude 3rdparty components (everest, p256-m) that are not needed
++# add_subdirectory(3rdparty)
+
+ add_subdirectory(library)
