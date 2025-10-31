@@ -11,7 +11,7 @@ cmake_minimum_required(VERSION 3.16)
 # an object library that can be added to other projects.
 
 project(crypto
-	VERSION 0.2.4
+	VERSION 0.2.5
 	DESCRIPTION "OpenEMV common crypto abstraction"
 	HOMEPAGE_URL "https://github.com/openemv/crypto"
 	LANGUAGES C
